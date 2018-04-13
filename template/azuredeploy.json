@@ -20,7 +20,7 @@
             "metadata": {
                 "description": "Name of Virtual Machine."
             },
-            "defaultValue": "omsserver"
+            "defaultValue": "UploadToOMSVM"
         },
         "deploymentGuid": {
             "type": "string",
@@ -60,7 +60,7 @@
             }
         },
         "azureStackAdminPassword": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "The password for the service admin account of Azure Stack. "
             }
@@ -89,18 +89,6 @@
                 "description": "Fully Qualified Domain Name for this Azure Stack. e.g. azurestack.external for ASDK"
             },
             "defaultValue": "azurestack.external"
-        },
-        "storageAcctName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the storage account containing MasterScript.ps1. "
-            }
-        },
-        "blobContainerName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the blob container you created within the storage account above which contains MasterScript.ps1"
-            }
         }
     },
     "variables": {
@@ -119,11 +107,12 @@
         "dnsNameForPublicIP": "[tolower(concat('dns', uniquestring(resourceGroup().id)))]",
         "networkSecurityGroupName": "[replace(replace(tolower(concat('nsg',resourceGroup().name)), '-', ''), '.','')]",
         "vmStorageAccountContainerName": "vhds",
-        "vmSize": "Standard_A1",
+        "vmSize": "Standard_A2",
         "scriptFolder": ".",
         "scriptFileName": "MasterScript.ps1",
         "scriptParameters": "[concat('-DeploymentGuid ', parameters('deploymentGuid'), ' ', '-OMSWorkspace ', parameters('omsWorkspace'), ' ', '-OMSResourceGroup ', parameters('omsResourceGroupName'), ' ', '-azureStackAdminUsername ', parameters('azureStackAdminUsername'), ' ', '-azureStackAdminPassword ', parameters('azureStackAdminPassword'), ' ', '-azureUsername ', parameters('azureUsername'), ' ', '-azurePassword ', parameters('azurePassword'), ' ', '-azureSubscription ', parameters('azureSubscription'), ' ', '-CloudName ', parameters('cloudName'), ' ', '-Region ', parameters('region'), ' ', '-Fqdn ', parameters('FQDN'))]",
-        "scriptURI": "[concat('https://', parameters('storageAcctName'), '.blob.', parameters('region'), '.', parameters('Fqdn'), '/', parameters('blobContainerName'), '/', variables('scriptFileName'))]"
+        "assetLocation": "https://raw.githubusercontent.com/maxilampert/AzureStack-AdminPowerShell-OMSIntegration/development",
+        "cseBlobNameScript": "MasterScript.ps1"
     },
     "resources": [
         {
@@ -278,9 +267,9 @@
                         "autoUpgradeMinorVersion": true,
                         "settings": {
                             "fileUris": [
-                                "[variables('scriptURI')]"
+                                "[concat(variables('assetLocation'), '/', variables('cseBlobNameScript'))]"
                             ],
-                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters'))]"
+                            "commandToExecute": "[concat('powershell -NoLogo -NoProfile -ExecutionPolicy Unrestricted -File ', variables('cseBlobNameScript'),' ', variables('scriptParameters'))]"
                         }
                     }
                 }

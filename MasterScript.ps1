@@ -36,11 +36,11 @@ param(
     [Parameter(Mandatory = $true)]
     [string] $azureStackAdminUsername,
     [Parameter(Mandatory = $true)]
-    [string] $azureStackAdminPassword,
+    [securestring] $azureStackAdminPassword,
     [Parameter(Mandatory = $true)]
     [string] $azureUsername,
     [Parameter(Mandatory = $true)]
-    [string] $azurePassword,
+    [securestring] $azurePassword,
     [Parameter(Mandatory = $true)]
     [string] $azureSubscription,
     [Parameter(Mandatory = $true)]
@@ -50,9 +50,6 @@ param(
     [Parameter(Mandatory = $true)]
     [string] $Fqdn
 )
-
-$azureStackAdminPasswordSecureString = $azureStackAdminPassword | ConvertTo-SecureString -Force -AsPlainText
-$azurePasswordSecureString = $azurePassword | ConvertTo-SecureString -Force -AsPlainText
 
 # install git
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
@@ -95,9 +92,9 @@ $infoJson = ConvertTo-Json $info
 Set-Content -Path "C:\AZSAdminOMSInt\info.txt" -Value $infoJson
 
 #store passwords in txt files. 
-$passwordText = $azureStackAdminPasswordSecureString | ConvertFrom-SecureString
+$passwordText = $azureStackAdminPassword | ConvertFrom-SecureString
 Set-Content -Path "C:\AZSAdminOMSInt\azspassword.txt" -Value $passwordText
-$passwordText = $azurePasswordSecureString | ConvertFrom-SecureString
+$passwordText = $azurePassword | ConvertFrom-SecureString
 Set-Content -Path "C:\AZSAdminOMSInt\azpassword.txt" -Value $passwordText
 
 # Download OMS Ingestion API modules (Testing to remove modules from source)
