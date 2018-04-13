@@ -72,7 +72,7 @@
             }
         },
         "azurePassword": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "Azure Account password. "
             }
