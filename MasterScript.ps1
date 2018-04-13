@@ -36,11 +36,11 @@ param(
     [Parameter(Mandatory = $true)]
     [string] $azureStackAdminUsername,
     [Parameter(Mandatory = $true)]
-    [securestring] $azureStackAdminPassword,
+    [string] $azureStackAdminPassword,
     [Parameter(Mandatory = $true)]
     [string] $azureUsername,
     [Parameter(Mandatory = $true)]
-    [securestring] $azurePassword,
+    [string] $azurePassword,
     [Parameter(Mandatory = $true)]
     [string] $azureSubscription,
     [Parameter(Mandatory = $true)]
@@ -50,6 +50,9 @@ param(
     [Parameter(Mandatory = $true)]
     [string] $Fqdn
 )
+
+$azureStackAdminPasswordSecureString = $azureStackAdminPassword | ConvertTo-SecureString -Force -AsPlainText
+$azurePasswordSecureString = $azurePassword | ConvertTo-SecureString -Force -AsPlainText
 
 # install git
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
@@ -63,7 +66,7 @@ $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";"
 # TODO: pull script from public github without token. 
 cd C:\
 # git clone "https://chasat%40microsoft.com:$($TFSPersonalAccessToken)@mas2oms.visualstudio.com/DefaultCollection/_git/Intellistack"
-git clone "https://github.com/maxilampert/AzureStack-AdminPowerShell-OMSIntegration.git" C:\AZSAdminOMSInt
+git clone "https://github.com/Azure-Samples/AzureStack-AdminPowerShell-OMSIntegration.git" C:\AZSAdminOMSInt
 
 # installing powershell modules for azure stack. 
 # NuGet required for Set-PsRepository PSGallery.  
@@ -92,9 +95,9 @@ $infoJson = ConvertTo-Json $info
 Set-Content -Path "C:\AZSAdminOMSInt\info.txt" -Value $infoJson
 
 #store passwords in txt files. 
-$passwordText = $azureStackAdminPassword | ConvertFrom-SecureString
+$passwordText = $azureStackAdminPasswordSecureString | ConvertFrom-SecureString
 Set-Content -Path "C:\AZSAdminOMSInt\azspassword.txt" -Value $passwordText
-$passwordText = $azurePassword | ConvertFrom-SecureString
+$passwordText = $azurePasswordSecureString | ConvertFrom-SecureString
 Set-Content -Path "C:\AZSAdminOMSInt\azpassword.txt" -Value $passwordText
 
 # Download OMS Ingestion API modules (Testing to remove modules from source)

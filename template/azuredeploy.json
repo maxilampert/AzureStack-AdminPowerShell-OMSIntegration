@@ -60,7 +60,7 @@
             }
         },
         "azureStackAdminPassword": {
-            "type": "securestring",
+            "type": "string",
             "metadata": {
                 "description": "The password for the service admin account of Azure Stack. "
             }
@@ -72,7 +72,7 @@
             }
         },
         "azurePassword": {
-            "type": "securestring",
+            "type": "string",
             "metadata": {
                 "description": "Azure Account password. "
             }
