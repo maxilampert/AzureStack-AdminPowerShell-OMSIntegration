@@ -2,7 +2,7 @@ Start-Transcript -Path C:\AZSAdminOMSInt\OpsDataToOMS.log
 Set-ExecutionPolicy Bypass -Force
 Install-Module -Name OMSIngestionAPI -Force
 Install-Module -Name AzureRM.OperationalInsights -Force
-Import-Module C:\AZSAdminOMSInt\AzureStack-Tools-vnext\Infrastructure\AzureStack.Infra.psm1 -Force
+Import-Module C:\AZSAdminOMSInt\AzureStack-Tools-master\Infrastructure\AzureStack.Infra.psm1 -Force
 
 #OMS Authentication
 

@@ -107,8 +107,8 @@ Save-Module -Name OMSIngestionAPI -Path "C:\AZSAdminOMSInt\OMSAPI"
 
 #Download Azure Stack Tools VNext
 cd c:\AZSAdminOMSInt
-invoke-webrequest https://github.com/Azure/AzureStack-Tools/archive/vnext.zip -OutFile vnext.zip
-expand-archive vnext.zip -DestinationPath . -Force
+invoke-webrequest https://github.com/Azure/AzureStack-Tools/archive/master.zip -OutFile master.zip
+expand-archive master.zip -DestinationPath . -Force
 
 # schedule windows scheduled task
 cd C:\AZSAdminOMSInt
